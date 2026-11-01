@@ -1,6 +1,5 @@
 package com.maetschl.kstory.libgdx;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
@@ -38,7 +37,7 @@ public final class KStoryRuntime {
     public void load() {
         stories.clear();
         FileHandle file = file("stories.json");
-        if (!file.exists()) return;
+        if (file == null || !file.exists()) return;
         JsonValue values = new JsonReader().parse(file).get("stories");
         if (values == null || !values.isObject()) return;
         for (JsonValue story = values.child; story != null; story = story.next) {
@@ -48,6 +47,9 @@ public final class KStoryRuntime {
 
     public void setLocale(String locale) { localization.setLocale(locale); }
     public String locale() { return localization.locale(); }
+    public String sourceLocale() { return localization.sourceLocale(); }
+    public List<KStoryLocale> availableLocales() { return localization.availableLocales(); }
+    public boolean isLocaleDeclared(String locale) { return localization.isLocaleDeclared(locale); }
     public String translate(String key, Map<String, String> variables) { return localization.translate(key, variables); }
     public String translate(String key) { return translate(key, null); }
 
@@ -101,11 +103,7 @@ public final class KStoryRuntime {
     }
 
     private FileHandle file(String name) {
-        FileHandle packaged = Gdx.files.internal(config.assetRoot() + name);
-        if (packaged.exists()) return packaged;
-        FileHandle nested = Gdx.files.internal("assets/" + config.assetRoot() + name);
-        if (nested.exists()) return nested;
-        return Gdx.files.internal("core/assets/" + config.assetRoot() + name);
+        return KStoryAssets.resolve(config, name);
     }
 
     private static final class StoryDefinition {
