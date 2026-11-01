@@ -41,12 +41,12 @@ configured LibGDX asset root. Only `accepted` target translations are active;
 missing, pending and `on_review` entries fall back to the source locale. The
 reader accepts stable connections and the legacy `next`/`choices` projection.
 
-Build and publish locally with:
+Build the runtime directly from this repository with:
 
 ```bash
 gradle test
-gradle publishToMavenLocal
 ```
 
-Releases are published from [Maetschl/KStory-LibGDX](https://github.com/Maetschl/KStory-LibGDX)
-using semantic versioning and `maven-publish`.
+Koble consumes this project through a Gradle composite build. Clone
+`Maetschl/KStory-LibGDX` next to Koble, or pass its path with
+`-PkstoryLibGdxDir=/path/to/KStory-LibGDX`; Maven Central is not required.
