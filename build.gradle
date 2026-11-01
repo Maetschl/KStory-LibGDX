@@ -1,0 +1,48 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'com.maetschl.kstory'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'com.badlogicgames.gdx:gdx:1.12.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+    withSourcesJar()
+    withJavadocJar()
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'KStory LibGDX'
+                description = 'Generic LibGDX runtime for KStory schema 1 content'
+                url = 'https://github.com/Maetschl/KStory-LibGDX'
+                licenses {
+                    license {
+                        name = 'The MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+            }
+        }
+    }
+}
